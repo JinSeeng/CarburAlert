@@ -109,3 +109,21 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Indicateur de chargement (US B2) */
+@keyframes carbur-alerte-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.carbur-alerte-spinner {
+  display: inline-block;
+  animation: carbur-alerte-spin 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carbur-alerte-spinner {
+    animation: none;
+  }
+}
