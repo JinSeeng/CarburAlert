@@ -1,17 +1,16 @@
-import { Link } from 'react-router-dom'
-import { usePageTitle } from '../hooks/usePageTitle'
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-export function NotFoundContent() {
+export default function NotFoundPage() {
+  useEffect(() => {
+    document.title = "Page introuvable — Carbur'Alert";
+  }, []);
+
   return (
-    <main>
+    <>
       <h1>Page introuvable</h1>
-      <p>Cette page n'existe pas, ou la station demandée est introuvable.</p>
-      <Link to="/">Retour à l'accueil</Link>
-    </main>
-  )
-}
-
-export function NotFoundPage() {
-  usePageTitle("Page introuvable - Carbur'Alerte")
-  return <NotFoundContent />
+      <p>Cette station ou cette page n'existe pas.</p>
+      <Link to="/">Retour à la recherche</Link>
+    </>
+  );
 }
