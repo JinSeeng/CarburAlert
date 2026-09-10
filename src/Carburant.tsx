@@ -249,7 +249,6 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 };
 
 const calcul_rentabilité = (current_index : number):number => {
-  
   let score : number = 0
   if (data_station!=undefined) {
   //console.log("gasole prix : ",data_station.results[carburant_index].gazole_prix)

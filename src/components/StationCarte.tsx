@@ -1,12 +1,15 @@
 import Card from '@codegouvfr/react-dsfr/Card';
 import Badge from '@codegouvfr/react-dsfr/Badge';
+import type { ResultatRentabilite } from '../domain/rentabilite';
 import type { Station } from '../domain/types';
 
 interface StationCarteProps {
   station: Station;
+  estReference?: boolean;
+  rentabilite?: ResultatRentabilite;
 }
 
-export default function StationCarte({ station }: StationCarteProps) {
+export default function StationCarte({ station, estReference, rentabilite }: StationCarteProps) {
   const localisation = [station.codePostal, station.ville].filter(Boolean).join(' ');
 
   return (
@@ -38,6 +41,28 @@ export default function StationCarte({ station }: StationCarteProps) {
         ) : (
           <p className="fr-text--sm fr-mb-0">Prix non communiqué</p>
         )
+      }
+      endDetail={
+        station.distanceKm !== undefined ? `${station.distanceKm.toFixed(1)} km` : undefined
+      }
+      footer={
+        estReference ? (
+          <p className="fr-text--sm fr-mb-0" style={{ color: 'var(--text-mention-grey)' }}>
+            Station la plus proche — référence du calcul de rentabilité
+          </p>
+        ) : rentabilite ? (
+          <p className="fr-text--sm fr-mb-0">
+            <Badge
+              as="span"
+              small
+              noIcon
+              severity={rentabilite.rentable ? 'success' : undefined}
+            >
+              {rentabilite.rentable ? 'Détour rentable' : 'Détour non rentable'}
+            </Badge>{' '}
+            {rentabilite.explication}
+          </p>
+        ) : undefined
       }
     />
   );
