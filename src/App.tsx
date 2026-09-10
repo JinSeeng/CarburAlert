@@ -5,7 +5,11 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 import Carburant from './Carburant.tsx';
 import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes/router.ts';
 
+export default function App() {
+  return <RouterProvider router={router} />;
 
 function App() {
   const [count, setCount] = useState(0)
@@ -124,6 +128,3 @@ function App() {
       <section id="spacer"></section>
     </>
   )
-}
-
-export default App
