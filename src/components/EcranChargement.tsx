@@ -1,10 +1,8 @@
-import './EcranChargement.css';
-
-export function EcranChargement() {
+export default function EcranChargement() {
   return (
-    <div className="ecran-chargement" role="status" aria-live="polite">
-      <span className="ecran-chargement__spinner" aria-hidden="true" />
-      <p>Recherche en cours…</p>
+    <div className="ecran ecran-chargement">
+      <div className="spinner"></div>
+      <p>Recherche en cours...</p>
     </div>
   );
 }

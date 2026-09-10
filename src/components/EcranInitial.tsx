@@ -1,38 +1,18 @@
-import './EcranInitial.css';
+// Cet écran s'affiche quand on arrive sur le site, avant d'avoir rien tapé.
 
-export function EcranInitial() {
+export default function EcranInitial() {
   return (
-    <section className="ecran-initial">
-      <h1>Bienvenue sur CarburAlerte</h1>
-      <p className="ecran-initial__intro">
-        Ce service compare les prix des stations autour de vous, à partir des données officielles du gouvernement.
+    <div className="ecran ecran-initial">
+      <h1>Bienvenue sur CarburAlerte ⛽</h1>
+      <p>
+        Ce site t'aide à trouver une station moins chère autour de toi, et te
+        dit si le détour vaut vraiment le coup.
       </p>
-
-      <ol className="ecran-initial__etapes">
-        <li className="ecran-initial__etape">
-          <span className="ecran-initial__numero">1</span>
-          <div>
-            <h2>Votre position</h2>
-            <p>Indiquez une adresse pour chercher les stations autour de vous.</p>
-          </div>
-        </li>
-
-        <li className="ecran-initial__etape">
-          <span className="ecran-initial__numero">2</span>
-          <div>
-            <h2>Votre carburant</h2>
-            <p>Choisissez le carburant que vous recherchez.</p>
-          </div>
-        </li>
-
-        <li className="ecran-initial__etape">
-          <span className="ecran-initial__numero">3</span>
-          <div>
-            <h2>Le résultat</h2>
-            <p>La liste des stations trouvées s'affiche, avec leur prix.</p>
-          </div>
-        </li>
+      <ol>
+        <li>Indique ton adresse</li>
+        <li>Choisis ton carburant</li>
+        <li>Le site liste les stations autour de toi avec leur prix</li>
       </ol>
-    </section>
+    </div>
   );
 }

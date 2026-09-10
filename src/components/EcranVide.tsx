@@ -1,13 +1,9 @@
-import './EcranStatut.css';
-
-export function EcranVide() {
+export default function EcranVide() {
   return (
-    <div className="ecran-statut ecran-statut--vide" role="status">
-      <span className="ecran-statut__icone" aria-hidden="true">
-        🔍
-      </span>
+    <div className="ecran ecran-vide">
+      <p className="emoji">🔍</p>
       <h2>Aucune station trouvée</h2>
-      <p>Aucune station proposant ce carburant n'a été trouvée près de cette adresse.</p>
+      <p>Il n'y a pas de station avec ce carburant près de cette adresse.</p>
     </div>
   );
 }
