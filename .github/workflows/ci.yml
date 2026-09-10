@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Vérification des types
+        run: npx tsc -b
+
+      - name: Tests avec rapport de couverture
+        run: npm run test:coverage
+
+      - name: Publication du rapport de couverture
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapport-couverture
+          path: coverage/
+          retention-days: 30
+
+      - name: Build de production
+        run: npm run build
