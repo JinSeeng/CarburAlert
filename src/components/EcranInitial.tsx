@@ -20,7 +20,7 @@ const ETAPES: Etape[] = [
   {
     numero: 3,
     titre: 'Le résultat',
-    texte: 'La liste des stations trouvées s\u2019affiche, avec leur prix.',
+    texte: 'La liste des stations trouvées s affiche, avec leur prix.',
   },
 ];
 
