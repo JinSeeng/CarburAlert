@@ -1,17 +1,19 @@
-import './EcranStatut.css';
+import './EcranErreur.css';
 
-interface Props {
+interface EcranErreurProps {
   message: string;
+  onReessayer: () => void;
 }
 
-export function EcranErreur({ message }: Props) {
+export function EcranErreur({ message, onReessayer }: EcranErreurProps) {
   return (
-    <div className="ecran-statut ecran-statut--erreur" role="alert">
-      <span className="ecran-statut__icone" aria-hidden="true">
-        ⚠
-      </span>
-      <h2>La recherche a échoué</h2>
-      <p>{message}</p>
+    <div className="ecran-erreur" role="alert">
+      <div className="ecran-erreur__icone">⚠️</div>
+      <h2 className="ecran-erreur__titre">Une erreur est survenue</h2>
+      <p className="ecran-erreur__message">{message}</p>
+      <button type="button" className="ecran-erreur__bouton" onClick={onReessayer}>
+        Réessayer
+      </button>
     </div>
   );
 }

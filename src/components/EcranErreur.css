@@ -1,0 +1,45 @@
+.ecran-erreur {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ecran-erreur__icone {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.ecran-erreur__titre {
+  font-size: 20px;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.ecran-erreur__message {
+  color: var(--text);
+  max-width: 50ch;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.ecran-erreur__bouton {
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ecran-erreur__bouton:hover {
+  opacity: 0.9;
+}

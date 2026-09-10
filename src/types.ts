@@ -1,6 +1,3 @@
-/**
- * Les 5 états possibles de l'écran de recherche.
- */
 export const EtatRecherche = {
   Initial: 'initial',
   Chargement: 'chargement',

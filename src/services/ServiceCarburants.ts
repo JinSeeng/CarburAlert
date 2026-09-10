@@ -1,24 +1,15 @@
 import { ErreurRecherche, type Station } from '../types';
-interface EnregistrementBrut {
-  adresse?: string;
-  [champ: string]: unknown;
-}
+
 export class ServiceCarburants {
   private readonly urlGeocodage = 'https://data.geopf.fr/geocodage/search';
-
   private readonly urlPrixCarburants =
-    'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/' +
-    'prix-des-carburants-en-france-flux-instantane-v2/records';
+    'https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records';
 
-  
-  async geocoderAdresse(
-    adresse: string
-  ): Promise<{ latitude: number; longitude: number }> {
-    const params = new URLSearchParams({ q: adresse, limit: '1' });
-
+  async geocoderAdresse(adresse: string): Promise<{ latitude: number; longitude: number }> {
     let reponse: Response;
+
     try {
-      reponse = await fetch(`${this.urlGeocodage}?${params.toString()}`);
+      reponse = await fetch(`${this.urlGeocodage}?q=${encodeURIComponent(adresse)}&limit=1`);
     } catch {
       throw new ErreurRecherche(
         'Impossible de contacter le service de géocodage.',
@@ -28,22 +19,22 @@ export class ServiceCarburants {
 
     if (!reponse.ok) {
       throw new ErreurRecherche(
-        `Le service de géocodage a répondu une erreur (${reponse.status}).`,
+        'Le service de géocodage est temporairement indisponible.',
         'GEOCODAGE'
       );
     }
 
     const donnees = await reponse.json();
-    const premiereFeature = donnees?.features?.[0];
+    const point = donnees?.features?.[0];
 
-    if (!premiereFeature) {
+    if (!point) {
       throw new ErreurRecherche(
         `Aucune adresse trouvée pour « ${adresse} ».`,
         'GEOCODAGE'
       );
     }
 
-    const [longitude, latitude] = premiereFeature.geometry.coordinates;
+    const [longitude, latitude] = point.geometry.coordinates;
     return { latitude, longitude };
   }
 
@@ -53,36 +44,36 @@ export class ServiceCarburants {
     carburant: string,
     rayonMetres = 10_000
   ): Promise<Station[]> {
-   
     const filtreGeo = `distance(geom, geom'POINT(${longitude} ${latitude})', ${rayonMetres}m)`;
-    const params = new URLSearchParams({ where: filtreGeo, limit: '20' });
+    const url = `${this.urlPrixCarburants}?where=${encodeURIComponent(filtreGeo)}&limit=20`;
 
     let reponse: Response;
+
     try {
-      reponse = await fetch(`${this.urlPrixCarburants}?${params.toString()}`);
+      reponse = await fetch(url);
     } catch {
       throw new ErreurRecherche(
-        'Impossible de contacter le flux des prix carburants.',
+        'Impossible de contacter le serveur des prix des carburants.',
         'RESEAU'
       );
     }
 
     if (!reponse.ok) {
       throw new ErreurRecherche(
-        `Le flux des prix a répondu une erreur (${reponse.status}).`,
+        'Le service des prix de carburants est temporairement indisponible.',
         'FLUX_PRIX'
       );
     }
 
     const donnees = await reponse.json();
-    const enregistrements: EnregistrementBrut[] = donnees?.results ?? [];
+    const liste = donnees?.results || [];
     const champPrix = `${carburant.toLowerCase()}_prix`;
 
-    return enregistrements
-      .filter((enregistrement) => enregistrement[champPrix] != null)
-      .map((enregistrement) => ({
-        adresse: enregistrement.adresse ?? 'Adresse inconnue',
-        prixLitre: Number(enregistrement[champPrix]),
+    return liste
+      .filter((item: any) => item[champPrix] != null)
+      .map((item: any) => ({
+        adresse: item.adresse || 'Adresse inconnue',
+        prixLitre: Number(item[champPrix]),
       }));
   }
 }

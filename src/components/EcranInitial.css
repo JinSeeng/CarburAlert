@@ -11,6 +11,7 @@
 .ecran-initial h1 {
   font-size: 32px;
   margin: 0 0 12px;
+  color: var(--text);
 }
 
 .ecran-initial__intro {
@@ -41,12 +42,14 @@
 .ecran-initial__etape h2 {
   font-size: 17px;
   margin: 0 0 4px;
+  color: var(--text);
 }
 
 .ecran-initial__etape p {
   color: var(--text);
   font-size: 0.9rem;
   line-height: 1.5;
+  margin: 0;
 }
 
 .ecran-initial__numero {

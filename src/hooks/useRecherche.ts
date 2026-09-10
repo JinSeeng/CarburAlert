@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ServiceCarburants } from '../services/ServiceCarburants';
 import { EtatRecherche, ErreurRecherche, type Station } from '../types';
+import { ServiceCarburants } from '../services/ServiceCarburants';
 
 const serviceCarburants = new ServiceCarburants();
 
@@ -9,8 +9,9 @@ export function useRecherche() {
   const [stations, setStations] = useState<Station[]>([]);
   const [messageErreur, setMessageErreur] = useState('');
 
-  async function lancerRecherche(adresse: string, carburant: string) {
-    setEtat(EtatRecherche.Chargement); // le spinner ne s'affiche qu'à partir d'ici
+  async function lancerRecherche(adresse: string, carburant: string = 'gaspal') {
+    setEtat(EtatRecherche.Chargement);
+    setMessageErreur('');
 
     try {
       const position = await serviceCarburants.geocoderAdresse(adresse);
@@ -21,6 +22,7 @@ export function useRecherche() {
       );
 
       if (resultats.length === 0) {
+        setStations([]);
         setEtat(EtatRecherche.Vide);
         return;
       }
