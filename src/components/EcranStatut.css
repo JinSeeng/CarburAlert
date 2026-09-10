@@ -1,0 +1,50 @@
+.ecran-statut {
+  max-width: 420px;
+  margin: 24px auto;
+  padding: 44px 28px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.ecran-statut__icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.ecran-statut h2 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.ecran-statut p {
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.ecran-statut--vide {
+  background: var(--code-bg);
+}
+.ecran-statut--vide .ecran-statut__icone {
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.ecran-statut--erreur {
+  --erreur: #d9463e;
+  --erreur-bg: rgba(217, 70, 62, 0.1);
+  background: var(--erreur-bg);
+  border-color: var(--erreur);
+}
+.ecran-statut--erreur .ecran-statut__icone {
+  background: var(--erreur);
+  color: #fff;
+}
+.ecran-statut--erreur h2 {
+  color: var(--erreur);
+}

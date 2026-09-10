@@ -1,0 +1,65 @@
+.ecran-initial {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: left;
+  box-shadow: var(--shadow);
+  margin: 24px 0;
+}
+
+.ecran-initial h1 {
+  font-size: 32px;
+  margin: 0 0 12px;
+}
+
+.ecran-initial__intro {
+  color: var(--text);
+  max-width: 60ch;
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+.ecran-initial__etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.ecran-initial__etape {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.ecran-initial__etape h2 {
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+
+.ecran-initial__etape p {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ecran-initial__numero {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-weight: bold;
+  font-family: var(--mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
