@@ -182,3 +182,213 @@
     border-right-color: var(--border);
   }
 }
+
+/*US B1 — État initial */
+
+/* --- formulaire de recherche, toujours visible en haut de l'app --- */
+.formulaire-recherche {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+  text-align: left;
+
+  input,
+  select {
+    padding: 9px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-h);
+    font-size: 0.95rem;
+    font-family: var(--sans);
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  }
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    padding: 9px 20px;
+    border: 1px solid var(--accent-border);
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.3s;
+
+    &:hover:not(:disabled) {
+      border-color: var(--text-h);
+    }
+
+    &:disabled {
+      background: var(--border);
+      border-color: var(--border);
+      color: var(--text);
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* --- écran initial (US B1) ---*/
+.ecran-initial {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: left;
+  box-shadow: var(--shadow);
+  margin: 24px 0;
+
+  h1 {
+    font-size: 32px;
+    margin: 0 0 12px;
+  }
+
+  &__intro {
+    color: var(--text);
+    max-width: 60ch;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  &__etapes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  &__etape {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    text-align: left;
+
+    h2 {
+      font-size: 17px;
+      margin: 0 0 4px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+  }
+
+  &__numero {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-weight: bold;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* --- écran de chargement ---
+ 3e critère d'acceptance de la US B1. */
+.ecran-chargement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 0;
+  color: var(--text);
+
+  &__spinner {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    animation: rotation 0.8s linear infinite;
+  }
+}
+
+@keyframes rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecran-chargement__spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+/* --- écrans vide / erreur ---
+   Carte compacte et centrée, à l'opposé de .ecran-initial (large,
+   étapes numérotées) : c'est ce contraste qui rend les deux écrans
+   visuellement distincts, pas juste une différence de couleur. */
+.ecran-statut {
+  max-width: 420px;
+  margin: 24px auto;
+  padding: 44px 28px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  &__icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+
+  p {
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  &--vide {
+    background: var(--code-bg);
+
+    .ecran-statut__icone {
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+  }
+
+  &--erreur {
+    --erreur: #d9463e;
+    --erreur-bg: rgba(217, 70, 62, 0.1);
+    background: var(--erreur-bg);
+    border-color: var(--erreur);
+
+    .ecran-statut__icone {
+      background: var(--erreur);
+      color: #fff;
+    }
+    h2 {
+      color: var(--erreur);
+    }
+  }
+}
