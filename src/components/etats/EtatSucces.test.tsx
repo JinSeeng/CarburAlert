@@ -10,6 +10,7 @@ function station(id: string): Station {
     id,
     adresse: `Adresse ${id}`,
     coordonnees: { latitude: 45.7, longitude: 4.8 },
+    automate2424: false,
     prix: [],
     horaires: [],
     rupture: [],
@@ -21,7 +22,13 @@ describe('EtatSucces', () => {
   it('annonce le nombre de résultats trouvés', () => {
     render(
       <MemoryRouter>
-        <EtatSucces stations={[station('1'), station('2')]} positionLibelle="Lyon, France" />
+        <EtatSucces
+          stations={[station('1'), station('2')]}
+          positionLibelle="Lyon, France"
+          carburant={null}
+          capaciteReservoirLitres={50}
+          consommationL100km={6.5}
+        />
       </MemoryRouter>,
     );
 
@@ -32,7 +39,13 @@ describe('EtatSucces', () => {
   it('affiche une carte par station', () => {
     render(
       <MemoryRouter>
-        <EtatSucces stations={[station('1'), station('2'), station('3')]} positionLibelle="Lyon" />
+        <EtatSucces
+          stations={[station('1'), station('2'), station('3')]}
+          positionLibelle="Lyon"
+          carburant={null}
+          capaciteReservoirLitres={50}
+          consommationL100km={6.5}
+        />
       </MemoryRouter>,
     );
 
@@ -43,7 +56,13 @@ describe('EtatSucces', () => {
     const utilisateur = userEvent.setup();
     render(
       <MemoryRouter>
-        <EtatSucces stations={[station('1'), station('2')]} positionLibelle="Lyon" />
+        <EtatSucces
+          stations={[station('1'), station('2')]}
+          positionLibelle="Lyon"
+          carburant={null}
+          capaciteReservoirLitres={50}
+          consommationL100km={6.5}
+        />
       </MemoryRouter>,
     );
 
