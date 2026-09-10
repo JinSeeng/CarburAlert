@@ -66,6 +66,16 @@ body {
   margin: 0;
 }
 
+.lien-evitement {
+  position: relative;
+  z-index: 1;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
 h1,
 h2 {
   font-family: var(--heading);
