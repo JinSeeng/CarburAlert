@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
 
+
 function Carburants() {
   const [data, setData] = useState(null);
   const [data_station,setData_station] = useState<StationData>();
@@ -9,6 +10,7 @@ function Carburants() {
   const [adresse_var, setAdresse_var] = useState("");
   const [itemlist, setItemlist] = useState<string[]>([]);
   const [q, setQ] = useState("");
+  const [q_city, setQ__city] = useState("");
   const [fiche_string, setFiche_string] = useState("");
   const [tri_index, setTriIndex] = useState(0);
   const [base_coord_x, setBase_coord_x] = useState(0);
@@ -45,10 +47,22 @@ function Carburants() {
 
   const search = async ()  => {
     //7.016.toString()+" "+43.572.toString()
-    setFiche_string("")
-    fetchData(get_location_api(q));
+    if (capacité_réservoir>0 && carburant_consommation>0) {
+      setFiche_string("")
+      fetchData(get_location_api(make_search_string()));
+    }
+    
     //
   }
+
+  const make_search_string = ():string => {
+
+    return formatAddress(q)+q_city;
+  }
+
+  function formatAddress(address: string): string {
+  return address.split(' ').join('+') + '+';
+}
 
 useEffect(() => {
     // Ici, on va placer l'appel API
@@ -158,14 +172,29 @@ const tri_list= ()=>{
 
 
 const show_fiche_station = (current_index : number) => {
-  console.log("carburant consommation : ",carburant_consommation)
-  console.log("reservoir : ",capacité_réservoir)
+  
   if (data_station!=undefined) {
+    let carburants_rupture_temporaire_text = "Pas de rupture"
+    if (data_station.results[current_index].carburants_rupture_temporaire!=null) {
+    carburants_rupture_temporaire_text = data_station.results[current_index].carburants_rupture_temporaire
+    }
+
+    let carburants_rupture_definitive_text = "Pas de rupture"
+    if (data_station.results[current_index].carburants_rupture_definitive!=null) {
+    carburants_rupture_definitive_text = data_station.results[current_index].carburants_rupture_definitive
+    }
+
+    let horaires_jour_text = "Non disponible"
+    if (data_station.results[current_index].horaires_jour!=null) {
+    horaires_jour_text = data_station.results[current_index].horaires_jour
+    }
+    
+
     const local_fiche_string ="horaire automate 24/24 : "+
       data_station.results[current_index].horaires_automate_24_24+"\n"+
-      "horaires : "+data_station.results[current_index].horaires_jour+"\n"+
-      "carburants_rupture_temporaire : "+data_station.results[current_index].carburants_rupture_temporaire+"\n"+
-      "carburants_rupture_definitive : "+data_station.results[current_index].carburants_rupture_definitive
+      "horaires : "+horaires_jour_text+"\n"+
+      "rupture temporaire : "+carburants_rupture_temporaire_text+"\n"+
+      "rupture definitive : "+carburants_rupture_definitive_text
       +"\n"
       +"\n"
       +rentabilité_string(current_index)
@@ -396,6 +425,7 @@ const handleChange_reservoir = (e: ChangeEvent<HTMLInputElement>) => {
 </div>
 <div>
       <input value={q} onChange={(e) => setQ(e.target.value)} />
+      <input value={q_city} onChange={(e) => setQ__city(e.target.value)} />
       <button onClick={() => search()}>🔍</button>
     </div>
 

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codegouvfr/react-dsfr": "^1.34.0",
+    "@gouvfr/dsfr": "^1.15.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

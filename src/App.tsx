@@ -4,10 +4,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 import Carburant from './Carburant.tsx';
+import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
+
 
 function App() {
   const [count, setCount] = useState(0)
-
+  startReactDsfr({ defaultColorScheme: "system" });
   return (
     <>
 
