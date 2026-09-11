@@ -13,6 +13,7 @@ function station(partiel: Partial<Station> & { id: string }): Station {
     rupture: [],
     derniereMiseAJour: '',
     ...partiel,
+    automate2424: partiel.automate2424 ?? false,
   };
 }
 
