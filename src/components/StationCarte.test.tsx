@@ -13,6 +13,7 @@ function stationComplete(): Station {
     coordonnees: { latitude: 45.7, longitude: 4.8 },
     prix: [{ type: 'Gazole', valeur: 1.699, maj: '2026-09-08T08:00:00Z' }],
     horaires: [],
+    automate2424: false,
     rupture: [],
     derniereMiseAJour: '2026-09-08T08:00:00Z',
   };
@@ -48,6 +49,7 @@ describe('StationCarte', () => {
       coordonnees: null,
       prix: [],
       horaires: [],
+      automate2424: false,
       rupture: [],
       derniereMiseAJour: '',
     };
