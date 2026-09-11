@@ -1,22 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
-import { HomePage } from './pages/HomePage'
-import { StationDetailPage } from './pages/StationDetailPage'
-import { NotFoundPage } from './pages/NotFoundPage'
-import { SkipLink } from './components/SkipLink'
+import { RouterProvider } from 'react-router-dom';
+import { router } from './routes/router';
 
-function App() {
-  return (
-    <>
-      <SkipLink />
-      <div id="contenu-principal" tabIndex={-1}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/stations/:id" element={<StationDetailPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
-    </>
-  )
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App

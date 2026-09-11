@@ -12,17 +12,16 @@ export const ADRESSE_INCONNUE = 'Adresse non communiquée';
 export function normaliserStation(brute: unknown): Station {
   const s = isObjet(brute) ? brute : {};
   const prix = normaliserPrix(s);
-  const horaires = normaliserHoraires(s['horaires']);
 
   return {
     id: normaliserId(s['id']),
     adresse: normaliserChaine(s['adresse'], ADRESSE_INCONNUE),
     ville: normaliserChaineOptionnelle(s['ville']),
     codePostal: normaliserChaineOptionnelle(s['cp'] ?? s['code_postal']),
-    coordonnees: normaliserCoordonnees(s['latitude'], s['longitude']),
+    coordonnees: normaliserCoordonnees(s),
     prix,
-    automate2424: horaires.automate2424,
-    horaires: horaires.creneaux,
+    automate2424: false,
+    horaires: normaliserHoraires(s['horaires']),
     rupture: normaliserRupture(s),
     derniereMiseAJour: derniereMiseAJour(prix),
   };
@@ -78,6 +77,25 @@ function normaliserNombre(valeur: unknown): number | null {
 const DIVISEUR_PTV_GEODECIMAL = 100_000;
 
 function normaliserCoordonnees(
+  s: Record<string, unknown>,
+): { latitude: number; longitude: number } | null {
+  const depuisGeom = normaliserCoordonneesDepuisGeom(s['geom']);
+  if (depuisGeom) return depuisGeom;
+
+  return normaliserCoordonneesDepuisColonnesEchelonnees(s['latitude'], s['longitude']);
+}
+
+function normaliserCoordonneesDepuisGeom(
+  geomBrut: unknown,
+): { latitude: number; longitude: number } | null {
+  if (!isObjet(geomBrut)) return null;
+  const latitude = normaliserNombre(geomBrut['lat']);
+  const longitude = normaliserNombre(geomBrut['lon']);
+  if (latitude === null || longitude === null) return null;
+  return { latitude, longitude };
+}
+
+function normaliserCoordonneesDepuisColonnesEchelonnees(
   latitudeBrute: unknown,
   longitudeBrute: unknown,
 ): { latitude: number; longitude: number } | null {
@@ -132,83 +150,43 @@ function normaliserRupture(s: Record<string, unknown>): TypeCarburant[] {
   return resultat;
 }
 
-interface HorairesNormalises {
-  /** Station accessible 24h/24 via un automate (paiement carte), quel que soit le détail par jour. */
-  automate2424: boolean;
-  creneaux: CreneauHoraire[];
-}
-
-const HORAIRES_VIDES: HorairesNormalises = { automate2424: false, creneaux: [] };
-
-/**
- * Le champ "horaires" brut est une chaîne JSON (héritée d'une conversion
- * XML), de la forme :
- *   {"@automate-24-24": "", "jour": [{"@id":"1","@nom":"Lundi","@ferme":""}, ...]}
- *
- * ATTENTION : l'attribut "@ferme" ne reflète PAS de façon fiable une
- * fermeture réelle. Deux exemples réels du dataset portent "@ferme":"1"
- * sur les 7 jours alors qu'aucune des deux stations n'est fermée (l'une
- * en automate 24/24, l'autre ouverte en continu 01.00-01.00 chaque jour,
- * confirmé par le champ calculé "horaires_jour" renvoyé par l'API). On
- * n'utilise donc jamais "@ferme" pour décider si un jour est fermé.
- *
- * À la place, un jour est considéré fermé uniquement quand aucun créneau
- * "horaire" n'est fourni pour ce jour ET que la station n'est pas en
- * automate 24/24 (ce second cas, prioritaire, est traité séparément via
- * `automate2424`).
- */
-function normaliserHoraires(brute: unknown): HorairesNormalises {
-  if (typeof brute !== 'string' || brute.trim() === '') return HORAIRES_VIDES;
+function normaliserHoraires(brute: unknown): CreneauHoraire[] {
+  if (typeof brute !== 'string' || brute.trim() === '') return [];
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(brute);
   } catch {
-    return HORAIRES_VIDES;
+    return [];
   }
 
-  if (!isObjet(parsed)) return HORAIRES_VIDES;
-
-  const automate2424 = parsed['@automate-24-24'] === '1';
-
+  if (!isObjet(parsed)) return [];
   const jours = parsed['jour'];
-  if (!Array.isArray(jours)) return { automate2424, creneaux: [] };
+  if (!Array.isArray(jours)) return [];
 
-  const creneaux: CreneauHoraire[] = [];
+  const resultat: CreneauHoraire[] = [];
   for (const entree of jours) {
     if (!isObjet(entree)) continue;
     const jour = normaliserChaineOptionnelle(entree['@nom']);
     if (!jour) continue;
 
-    const { ouverture, fermeture } = normaliserCreneauJour(entree['horaire']);
+    const detailHoraire = isObjet(entree['horaire']) ? entree['horaire'] : null;
 
-    creneaux.push({
+    resultat.push({
       jour,
-      ouverture,
-      fermeture,
-      ferme: !automate2424 && ouverture === undefined && fermeture === undefined,
+      ouverture: formaterHeure(detailHoraire?.['@ouverture']),
+      fermeture: formaterHeure(detailHoraire?.['@fermeture']),
+      ferme: typeof entree['@ferme'] === 'string' && entree['@ferme'] !== '',
     });
   }
-  return { automate2424, creneaux };
+  return resultat;
 }
 
-/**
- * Le sous-champ "horaire" est imbriqué sous chaque jour et porte les clés
- * "@ouverture"/"@fermeture" (confirmé par un exemple réel du dataset, ex.
- * {"@ouverture": "01.00", "@fermeture": "01.00"}) — ce n'est pas
- * "@ouverture"/"@fermeture" directement sur l'objet du jour, contrairement
- * à ce qui était supposé initialement. L'API peut aussi le retourner comme
- * un tableau d'objets pour les jours à plusieurs créneaux (coupure
- * méridienne) : dans ce cas on ne garde que le premier créneau, faute de
- * structure de données adaptée pour en afficher plusieurs.
- */
-function normaliserCreneauJour(brute: unknown): { ouverture?: string; fermeture?: string } {
-  const horaire = Array.isArray(brute) ? brute[0] : brute;
-  if (!isObjet(horaire)) return {};
-  return {
-    ouverture: normaliserChaineOptionnelle(horaire['@ouverture']),
-    fermeture: normaliserChaineOptionnelle(horaire['@fermeture']),
-  };
+/** Le dataset encode l'heure "HH.MM" (point) ; on l'affiche "HH:MM" (deux-points). */
+function formaterHeure(valeur: unknown): string | undefined {
+  const chaine = normaliserChaineOptionnelle(valeur);
+  if (!chaine) return undefined;
+  return chaine.replace('.', ':');
 }
 
 function derniereMiseAJour(prix: PrixCarburant[]): string {

@@ -4,7 +4,7 @@ import { recupererStationParId } from '../api/prixCarburants';
 import { estAnnulation } from '../api/erreurs';
 import { formaterHorodatage } from '../lib/dates';
 import type { Station } from '../domain/types';
-import NotFoundPage from './NotFoundPage';
+import NotFoundPage from './NotFoundPage'; 
 
 type EtatFiche =
   | { statut: 'chargement' }
@@ -98,21 +98,22 @@ export default function FicheStationPage() {
       </ul>
 
       <h2>Horaires</h2>
-      {station.automate2424 && (
-        <p>Automate accessible 24h/24 (paiement par carte bancaire).</p>
+      {station.horaires.length > 0 ? (
+        <ul className="fr-raw-list fr-mb-4w">
+          {station.horaires.map((h) => (
+            <li key={h.jour} className="fr-mb-1w">
+              <span className="fr-text--bold">{h.jour}</span> :{' '}
+              {h.ferme
+                ? 'Fermé'
+                : h.ouverture && h.fermeture
+                  ? `${h.ouverture} - ${h.fermeture}`
+                  : 'Horaires non communiqués'}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="fr-mb-4w">Horaires non communiqués pour cette station.</p>
       )}
-      <ul className="fr-raw-list fr-mb-4w">
-        {station.horaires.map((h) => (
-          <li key={h.jour} className="fr-mb-1w">
-            <span className="fr-text--bold">{h.jour}</span> :{' '}
-            {h.ferme
-              ? 'fermé'
-              : h.ouverture !== undefined && h.ouverture === h.fermeture
-                ? 'ouvert 24h/24'
-                : `${h.ouverture ?? '?'} - ${h.fermeture ?? '?'}`}
-          </li>
-        ))}
-      </ul>
 
       {station.rupture.length > 0 && (
         <p role="alert">Rupture signalée : {station.rupture.join(', ')}</p>
