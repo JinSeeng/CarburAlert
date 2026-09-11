@@ -21,6 +21,8 @@ J’ai également codé moi-même toute la structure interne de la page de reche
 - **La création de code générique** : par exemple, j’ai utilisé l’IA pour créer une fonction `fetchData` générique, que j’ai ensuite personnalisée avec les API du projet.
 - **La modification de code existant** : par exemple, j’ai fourni à l’IA le code de `fetchData` que j’avais personnalisé afin qu’elle puisse m’aider à y ajouter une requête API supplémentaire.
 
+Lorsque j’ai voulu modifier `<span>fetchData</span>` pour faire deux requêtes API l’une après l’autre, la première solution proposée par l’IA ne fonctionnait pas. J’ai ensuite essayé de le faire sans IA, mais j’ai pensé que cela me prendrait trop de temps. J’ai alors fait un prompt beaucoup plus précis et détaillé, en précisant que je voulais modifier le moins possible le code initial pour éviter les erreurs. À partir de là, la solution a fonctionné.
+
 ### Cas de Sellia
 
 J’ai principalement utilisé l’IA pour accélérer certaines tâches réalisées en fin de projet, notamment lorsque le temps disponible ne me permettait pas de tout implémenter manuellement.
@@ -52,6 +54,7 @@ Elle m’a également servi à relire et vérifier mon code, notamment pour le n
 Cependant, les solutions proposées n’étaient pas toujours adaptées à mes besoins. L’IA avait parfois du mal à se focaliser sur un problème précis, proposait des solutions qui ne correspondaient pas à ma requête ou introduisait de nouvelles erreurs dans mon code.
 
 ### Cas général
+
 L’IA a également été utilisée pour la  **documentation et la préparation des livrables** . Nous avons notamment pu lui fournir du contenu que nous avions déjà rédigé afin de le reformuler, le structurer et le rendre plus clair et professionnel. Cette utilisation concerne notamment ce document ainsi que le README du projet. L’IA n’a donc pas servi à inventer le contenu, mais principalement à améliorer la forme de documents dont le contenu et les informations provenaient de notre travail.
 
 ## 3 erreurs de l’IA
